@@ -12,12 +12,15 @@ The plugin automates pull request review by spawning multiple subagents in paral
 
 ```
 code-review-codex/
-├── .codex-plugin/plugin.json           # Codex plugin manifest
-├── skills/
-│   └── code-review/
-│       ├── SKILL.md                    # Skill entrypoint (frontmatter + instructions)
-│       └── agents/openai.yaml          # UI metadata for chips / lists
-├── LICENSE                             # Apache 2.0 (carried over from the source plugin)
+├── marketplace.json                        # Codex marketplace manifest (this repo = a marketplace)
+├── plugins/
+│   └── code-review/                        # Plugin name matches folder name (codex requirement)
+│       ├── .codex-plugin/plugin.json       # Codex plugin manifest
+│       └── skills/
+│           └── code-review/
+│               ├── SKILL.md                # Skill entrypoint (frontmatter + instructions)
+│               └── agents/openai.yaml      # UI metadata for chips / lists
+├── LICENSE                                 # Apache 2.0 (carried over from the source plugin)
 └── README.md
 ```
 
@@ -60,35 +63,25 @@ Performs automated code review on a pull request using multiple specialized suba
 
 ## Installation
 
-### Option A — Personal marketplace (recommended for single-user installs)
+### Option A — From this marketplace (recommended)
 
-Register this directory's parent as a marketplace and add the plugin entry, then install:
+This repo is itself a Codex marketplace. Add it, then install the plugin — no manual JSON editing required:
 
 ```bash
-codex plugin marketplace add /Users/sarace/dev/probe/code-review-codex
-codex plugin install code-review
+codex plugin marketplace add ttxs69/code-review-codex
+codex plugin install code-review@code-review-codex
 ```
 
-If you maintain a personal marketplace file at `~/.agents/plugins/marketplace.json`, add an entry pointing at this directory:
+The `marketplace add` step accepts any of:
+- GitHub shorthand: `ttxs69/code-review-codex`
+- HTTPS URL: `https://github.com/ttxs69/code-review-codex`
+- SSH URL: `git@github.com:ttxs69/code-review-codex.git`
 
-```json
-{
-  "name": "personal",
-  "interface": { "displayName": "Personal" },
-  "plugins": [
-    {
-      "name": "code-review",
-      "source": { "source": "local", "path": "/Users/sarace/dev/probe/code-review-codex" },
-      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
-      "category": "Productivity"
-    }
-  ]
-}
-```
+Updates: re-run `codex plugin install code-review@code-review-codex` after the marketplace is refreshed to pick up new versions.
 
 ### Option B — Drop into personal skills directory
 
-Copy `skills/code-review/` into `~/.agents/skills/code-review/`. The skill is then invocable directly as `/code-review` (no plugin namespace).
+Copy `plugins/code-review/skills/code-review/` into `~/.agents/skills/code-review/`. The skill is then invocable directly as `/code-review` (no plugin namespace), bypassing the marketplace entirely.
 
 ## Invocation
 
@@ -113,7 +106,7 @@ Codex may also auto-invoke the skill when it judges it relevant, because `disabl
 | Aspect | Claude Code original | This Codex port |
 |---|---|---|
 | Manifest | `.claude-plugin/plugin.json` | `.codex-plugin/plugin.json` (Codex also reads the `.claude-plugin/` path, but we use the native one) |
-| Command unit | `commands/code-review.md` | `skills/code-review/SKILL.md` |
+| Command unit | `commands/code-review.md` | `plugins/code-review/skills/code-review/SKILL.md` |
 | Required frontmatter | `description`, `allowed-tools` | `name`, `description`, `allowed-tools` |
 | Slash command | `/code-review` | `/code-review:code-review` (plugin-namespaced) or `/code-review` (personal skills dir) |
 | Instruction file | `CLAUDE.md` | `AGENTS.md` |
@@ -126,7 +119,7 @@ The review pipeline, confidence rubric, false-positive heuristics, and link form
 
 ### Adjusting the confidence threshold
 
-Default is 80. Edit `skills/code-review/SKILL.md`:
+Default is 80. Edit `plugins/code-review/skills/code-review/SKILL.md`:
 
 ```markdown
 Filter out any issues with a score less than 80.
@@ -136,7 +129,7 @@ Change `80` to your preferred threshold (0-100).
 
 ### Customizing review focus
 
-Edit `skills/code-review/SKILL.md` to add or modify subagent tasks (e.g. security, performance, accessibility).
+Edit `plugins/code-review/skills/code-review/SKILL.md` to add or modify subagent tasks (e.g. security, performance, accessibility).
 
 ## License
 
