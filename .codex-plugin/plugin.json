@@ -1,0 +1,10 @@
+{
+  "name": "code-review",
+  "description": "Automated code review for pull requests using multiple specialized subagents with confidence-based scoring",
+  "version": "1.0.0",
+  "author": {
+    "name": "Migrated from anthropics/claude-plugins-official",
+    "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review"
+  },
+  "license": "Apache-2.0"
+}
