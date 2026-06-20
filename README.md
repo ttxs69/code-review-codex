@@ -10,17 +10,19 @@ The plugin automates pull request review by spawning multiple subagents in paral
 
 ## Layout
 
+Codex requires the marketplace manifest at `.agents/plugins/marketplace.json` (not at the repo root). Plugin paths in that manifest resolve relative to the marketplace root — i.e. the repo root — so plugins live at `plugins/<name>/`.
+
 ```
 code-review-codex/
-├── marketplace.json                        # Codex marketplace manifest (this repo = a marketplace)
+├── .agents/plugins/marketplace.json            # Codex marketplace manifest (required location)
 ├── plugins/
-│   └── code-review/                        # Plugin name matches folder name (codex requirement)
-│       ├── .codex-plugin/plugin.json       # Codex plugin manifest
+│   └── code-review/                            # Matches the name in marketplace.json
+│       ├── .codex-plugin/plugin.json           # Codex plugin manifest
 │       └── skills/
 │           └── code-review/
-│               ├── SKILL.md                # Skill entrypoint (frontmatter + instructions)
-│               └── agents/openai.yaml      # UI metadata for chips / lists
-├── LICENSE                                 # Apache 2.0 (carried over from the source plugin)
+│               ├── SKILL.md                    # Skill entrypoint (frontmatter + instructions)
+│               └── agents/openai.yaml          # UI metadata for chips / lists
+├── LICENSE                                     # Apache 2.0 (carried over from the source plugin)
 └── README.md
 ```
 
@@ -69,7 +71,7 @@ This repo is itself a Codex marketplace. Add it, then install the plugin — no 
 
 ```bash
 codex plugin marketplace add ttxs69/code-review-codex
-codex plugin install code-review@code-review-codex
+codex plugin add code-review@code-review-codex
 ```
 
 The `marketplace add` step accepts any of:
@@ -77,7 +79,7 @@ The `marketplace add` step accepts any of:
 - HTTPS URL: `https://github.com/ttxs69/code-review-codex`
 - SSH URL: `git@github.com:ttxs69/code-review-codex.git`
 
-Updates: re-run `codex plugin install code-review@code-review-codex` after the marketplace is refreshed to pick up new versions.
+Updates: run `codex plugin marketplace upgrade code-review-codex` to refresh the snapshot, then re-run `codex plugin add code-review@code-review-codex` to pick up the new version.
 
 ### Option B — Drop into personal skills directory
 
