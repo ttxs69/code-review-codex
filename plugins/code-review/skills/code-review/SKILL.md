@@ -1,7 +1,7 @@
 ---
 name: code-review
 description: Code review a pull request
-allowed-tools: Bash(gh issue view:*), Bash(gh search:*), Bash(gh issue list:*), Bash(gh pr comment:*), Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr list:*), Bash(git log:*), Bash(git show:*), Bash(git blame:*), Bash(find:*), Read
+allowed-tools: Bash(gh search:*), Bash(gh pr comment:*), Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr list:*), Bash(git log:*), Bash(git show:*), Bash(git blame:*), Bash(find:*), Read
 disable-model-invocation: false
 ---
 
@@ -25,7 +25,7 @@ To do this, follow these steps precisely:
    d. 75: Highly confident. The subagent double checked the issue, and verified that it is very likely it is a real issue that will be hit in practice. The existing approach in the PR is insufficient. The issue is very important and will directly impact the code's functionality, or it is an issue that is directly mentioned in the relevant AGENTS.md.
    e. 100: Absolutely certain. The subagent double checked the issue, and confirmed that it is definitely a real issue, that will happen frequently in practice. The evidence directly confirms this.
    `wait_agent` on all scoring ids together, then `close_agent` each one.
-6. Filter out any issues with a score less than 80. If there are no issues that meet this criteria, do not proceed.
+6. Filter out any issues with a score less than 75. If there are no issues that meet this criteria, do not proceed.
 7. Re-check eligibility by repeating the check from #1 (spawn_agent + wait_agent + close_agent) to make sure that the pull request is still eligible for code review.
 8. Finally, use the gh bash command to comment back on the pull request with the result. When writing your comment, keep in mind to:
    a. Keep your output brief
@@ -46,7 +46,7 @@ Examples of false positives, for steps 4 and 5:
 Notes:
 
 - Do not check build signal or attempt to build or typecheck the app. These will run separately, and are not relevant to your code review.
-- Use `gh` to interact with Github (eg. to fetch a pull request, or to create inline comments), rather than web fetch
+- Use `gh` to interact with Github (eg. to fetch a pull request, or to post a review comment), rather than web fetch
 - Make a todo list first
 - You must cite and link each bug (eg. if referring to an AGENTS.md, you must link it)
 - For your final comment, follow the following format precisely (assuming for this example that you found 3 issues):

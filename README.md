@@ -2,7 +2,7 @@
 
 Automated code review for pull requests using multiple specialized subagents with confidence-based scoring to filter false positives.
 
-This is a port of Anthropic's [`code-review`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review) Claude Code plugin to the [OpenAI Codex CLI](https://github.com/openai/codex) plugin/skill format. The logic is unchanged; only the packaging, the agent-dispatch idiom, and the instruction filename differ (Codex reads `AGENTS.md` rather than `CLAUDE.md`).
+This is a port of Anthropic's [`code-review`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review) Claude Code plugin to the [OpenAI Codex CLI](https://github.com/openai/codex) plugin/skill format. The logic is unchanged; only the packaging, the agent-dispatch idiom, the instruction filename, and the comment-footer text differ (Codex reads `AGENTS.md` rather than `CLAUDE.md`).
 
 ## Overview
 
@@ -42,7 +42,7 @@ Performs automated code review on a pull request using multiple specialized suba
    - **#4**: Reads previous PRs that touched these files, applies prior comments
    - **#5**: Reads code comments in modified files, checks compliance with them
 5. Scores each issue 0-100 for confidence level
-6. Filters out issues below the 80 confidence threshold
+6. Filters out issues below the 75 confidence threshold
 7. Re-checks PR eligibility before posting
 8. Posts a review comment with high-confidence issues only
 
@@ -83,7 +83,7 @@ Updates: run `codex plugin marketplace upgrade code-review-codex` to refresh the
 
 ### Option B — Drop into personal skills directory
 
-Copy `plugins/code-review/skills/code-review/` into `~/.agents/skills/code-review/`. The skill is then invocable directly as `/code-review` (no plugin namespace), bypassing the marketplace entirely.
+Copy `plugins/code-review/skills/code-review/` into `~/.codex/skills/code-review/` (i.e. `$CODEX_HOME/skills/code-review/`). The skill is then invocable directly as `/code-review` (no plugin namespace), bypassing the marketplace entirely.
 
 ## Invocation
 
@@ -121,13 +121,13 @@ The review pipeline, confidence rubric, false-positive heuristics, and link form
 
 ### Adjusting the confidence threshold
 
-Default is 80. Edit `plugins/code-review/skills/code-review/SKILL.md`:
+Default is 75. Edit `plugins/code-review/skills/code-review/SKILL.md`:
 
 ```markdown
-Filter out any issues with a score less than 80.
+Filter out any issues with a score less than 75.
 ```
 
-Change `80` to your preferred threshold (0-100).
+Change `75` to your preferred threshold (0-100).
 
 ### Customizing review focus
 
