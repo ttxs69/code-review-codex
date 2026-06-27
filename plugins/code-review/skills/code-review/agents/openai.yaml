@@ -1,4 +1,4 @@
 interface:
-  display_name: "Code Review"
-  short_description: "Automated PR review with multi-agent confidence-scored checks"
-  default_prompt: "Review this pull request"
+  display_name: "Code Review (Max Recall)"
+  short_description: "Maximum-effort PR/diff review using 10 parallel finder angles, single-vote verification, and a gap sweep — at most 15 ranked findings."
+  default_prompt: "Run max-recall code review on this pull request"
